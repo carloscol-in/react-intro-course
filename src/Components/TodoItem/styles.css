@@ -1,0 +1,44 @@
+.TodoItem {
+    padding: 20px 16px;
+    background-color: #f7f7f7;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    line-height: 1.6rem;
+    border-radius: 1rem;
+    border: 1px solid #d1d1d1;
+    box-shadow: 0px 0px 5px -3px black;
+    opacity: 0.5;
+}
+
+.TodoItem:first-of-type {
+    opacity: 1;
+}
+
+.TodoItem__text {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+    position: relative;
+}
+
+.TodoItem__text#text {
+    z-index: 999;
+}
+
+.TodoItem__text::before {
+    content: '';
+    position: absolute;
+    display: inline-block;
+    width: 100%;
+    height: 0.1rem;
+    top: 50%;
+    left: 0;
+    z-index: 0;
+    transform: translateY(-50%) scaleX(0);
+    transition: all 0.9s ease-in-out;
+    background-color: rgb(0, 0, 0);
+}
+.TodoItem__text.checked::before {
+    transform: translateY(-50%) scaleX(1);
+}

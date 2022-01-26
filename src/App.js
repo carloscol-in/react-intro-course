@@ -17,17 +17,32 @@ function App() {
   const todos = todosList;
   const [listTodos, setTodos] = useState(todos);
 
-  const completedTodos = todos.filter(todo => todo.completed).length;
-  const totalTodos = todos.length;
+  const completedTodos = listTodos.filter(todo => todo.completed).length;
+  const totalTodos = listTodos.length;
 
-  
+
   const filterTodos = (word) => {
-    console.log('word: ' + word);
     // if word '' return all todos
     if (word === '' || word === null) setTodos(todos);
 
     // filter todos that includes word in text
     setTodos(todos.filter(todo => todo.text.toLowerCase().includes(word)));
+  }
+
+  const completeTodos = (text) => {
+    const todoIndex = todos.findIndex(todo => todo.text === text);
+
+    const newTodos = [...todos];
+    
+    newTodos[todoIndex].completed = true;
+    setTodos(newTodos);
+  }
+
+  const deleteTodo = (text) => {
+    const todoIndex = todos.findIndex(todo => todo.text === text);
+    const newTodos = [...todos];
+    newTodos.splice(todoIndex, 1);
+    setTodos(newTodos);
   }
   
   return (
@@ -42,7 +57,7 @@ function App() {
         
         <TodoList>
           {listTodos.map(todo => (
-            <TodoItem key={todo.text} text={todo.text} completed={todo.completed} />
+            <TodoItem key={todo.text} text={todo.text} completed={todo.completed} onComplete={completeTodos} onDelete={deleteTodo} />
           ))}
         </TodoList>
 

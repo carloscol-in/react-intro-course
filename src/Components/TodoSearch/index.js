@@ -14,7 +14,7 @@ export const TodoSearch = ({ onWrite }) => {
         if (word === null) word = '';
         
         // clean word
-        word = word.trim();
+        word = word.trim().toLowerCase();
         
         // filter todos by word
         onWrite(word);

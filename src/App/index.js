@@ -1,5 +1,6 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useLocalStorage } from '../Hooks/useLocalStorage';
 import { AppUI } from './AppUI';
 
 const todosList = [
@@ -7,21 +8,36 @@ const todosList = [
   { id: '2', text: 'Prepare hot chocolate', completed: true },
   { id: '3', text: 'Prepare popcorn', completed: false },
 ]
+const initTodosFromLocalStorage = () => {
+  let localStorageTodos = JSON.parse(localStorage.getItem('TODOS_v1'));
+
+  localStorage.setItem('TODOS_v1', JSON.stringify(todosList));
+  
+  if (localStorageTodos === null) {
+    localStorage.setItem('TODOS_v1', JSON.stringify([]));
+    localStorageTodos = [];
+  }
+
+  return localStorageTodos;
+}
 
 function App() {
-  const todos = todosList;
-  const [listTodos, setTodos] = useState(todos);
+  const [todos, saveTodos] = useLocalStorage('TODOS_v1', []);
 
-  const completedTodos = listTodos.filter(todo => todo.completed).length;
-  const totalTodos = listTodos.length;
+  let completedTodos;
+  let totalTodos;
 
+  if (todos.length > 0) {
+    completedTodos = todos.filter(todo => todo.completed).length;
+    totalTodos = todos.length;
+  }
 
   const filterTodos = (word) => {
     // if word '' return all todos
-    if (word === '' || word === null) setTodos(todos);
+    if (word === '' || word === null) saveTodos(todos);
 
     // filter todos that includes word in text
-    setTodos(todos.filter(todo => todo.text.toLowerCase().includes(word)));
+    saveTodos(todos.filter(todo => todo.text.toLowerCase().includes(word)));
   }
 
   const completeTodos = (text) => {
@@ -30,22 +46,30 @@ function App() {
     const newTodos = [...todos];
     
     newTodos[todoIndex].completed = true;
-    setTodos(newTodos);
+    saveTodos(newTodos);
   }
 
   const deleteTodo = (text) => {
     const todoIndex = todos.findIndex(todo => todo.text === text);
     const newTodos = [...todos];
     newTodos.splice(todoIndex, 1);
-    setTodos(newTodos);
+    saveTodos(newTodos);
   }
+
+  console.log('render antes')
+  
+  useEffect(() => {
+    console.log('use effect')
+  }, [totalTodos]);
+
+  console.log('render despues')
   
   return (
     <AppUI
       total={totalTodos}
       completed={completedTodos}
       filterTodos={filterTodos}
-      todos={listTodos}
+      todos={todos}
       completeTodos={completeTodos}
       deleteTodo={deleteTodo}
     />

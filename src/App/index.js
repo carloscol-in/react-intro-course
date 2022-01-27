@@ -1,11 +1,6 @@
 import './App.css';
-import React, {useState} from 'react';
-
-import { TodoCounter } from './Components/TodoCounter';
-import { TodoSearch } from './Components/TodoSearch';
-import { TodoList } from './Components/TodoList';
-import { TodoItem } from './Components/TodoItem';
-import { CreateTodoButton } from './Components/CreateTodoButton';
+import React, { useState } from 'react';
+import { AppUI } from './AppUI';
 
 const todosList = [
   { id: '1', text: 'Bake cupcakes', completed: false },
@@ -46,24 +41,14 @@ function App() {
   }
   
   return (
-    <>
-      <div className='TodoAppContainer'>
-        <TodoCounter
-          total={totalTodos}
-          completed={completedTodos}
-        />
-
-        <TodoSearch onWrite={filterTodos}/>
-        
-        <TodoList>
-          {listTodos.map(todo => (
-            <TodoItem key={todo.text} text={todo.text} completed={todo.completed} onComplete={completeTodos} onDelete={deleteTodo} />
-          ))}
-        </TodoList>
-
-        <CreateTodoButton />
-      </div>
-    </>
+    <AppUI
+      total={totalTodos}
+      completed={completedTodos}
+      filterTodos={filterTodos}
+      todos={listTodos}
+      completeTodos={completeTodos}
+      deleteTodo={deleteTodo}
+    />
   );
 }
 
